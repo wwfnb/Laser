@@ -146,7 +146,8 @@ In the original gr1 dataset, bounding box coordinates were normalized to [0, 100
 During our preprocessing, they are converted into absolute pixel values based on the corresponding image resolution.
 
 ## 2️⃣ Step 2: Data Generation
-
+Our dataset is constructed in **four stages**, each corresponding to a specific data generation process.  
+You can run the following scripts to generate the corresponding datasets:
 
 # 🏋️‍♂️ Model Training
 
