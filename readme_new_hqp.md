@@ -149,6 +149,20 @@ During our preprocessing, they are converted into absolute pixel values based on
 Our dataset is constructed in **four stages**, each corresponding to a specific data generation process.  
 You can run the following scripts to generate the corresponding datasets:
 
+1. **Single-step SFT Data Generation**
+```bash
+python src/laser/generator/single_step_sft_generator.py
+```
+2. **Single-step DPO Data Generation**
+```bash
+python src/laser/generator/single_step_dpo_generator.py
+```
+3. **Multi-step SFT Data Generation**
+```bash
+python src/laser/generator/multi_step_sft_generator.py
+```
+4. **Multi-step DPO Data Generation**
+
 # 🏋️‍♂️ Model Training
 
 ## 🎛️ Training Parameters
