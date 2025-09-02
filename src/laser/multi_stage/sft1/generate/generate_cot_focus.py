@@ -14,6 +14,7 @@ import copy
 from io import BytesIO
 import base64
 import random
+import argparse
 
 from laser.utils.misc import generate_id, get_date, load_and_resize_image
 import re
@@ -88,15 +89,11 @@ def setup_ray():
 
 # setting for vlm
 from pixel_grounding.misc import TENSOR_PARALLEL_SIZE
-from pixel_grounding.models.qwen2_5vl import CustomQwen2_5VL_VLLM_Model
 LIMIT_MM_PER_PROMPT={
     "image": 3
 }
 MAX_NUM_SEQS= 16
 MAX_MODEL_LEN= (1024*12) # reduce it when OOM!
-
-
-from pixel_grounding.build_prompt import build_qwen_focus_cot_with_example
 
 @ray.remote(num_gpus=TENSOR_PARALLEL_SIZE)
 class InferenceActor:
@@ -121,20 +118,6 @@ class InferenceActor:
             max_num_batched_tokens= MAX_MODEL_LEN
             # gpu_memory_utilization= 0.95,
         )
-
-    def generate_one_by_one(self, llm_inputs: list, sampling_params: SamplingParams) -> list[str]:
-        responses = []
-        finish_reasons = []
-        for idx, llm_input in enumerate(llm_inputs):
-            try:
-                print(f"[{self.actor_id}]->sampling_params: {sampling_params}")
-                outs = self.llm.generate([llm_input], sampling_params=sampling_params)
-                responses.append(outs[0].outputs[0].text)
-                finish_reasons.append(outs[0].outputs[0].finish_reason)
-            except Exception as e:
-                responses.append("")
-                finish_reasons.append("Error_in_Generate")
-        return responses, finish_reasons
     
     def set_response_file(self, response_file: str):
         self.response_file = response_file
@@ -147,10 +130,6 @@ class InferenceActor:
             with open(self.response_file, 'a') as fa:
                 for item in items:
                     fa.write(json.dumps(item)+'\n')
-
-    def write_one_by_one(self, item: dict):
-        with open("temp.jsonl", 'a') as fa:
-            fa.write(json.dumps(item)+'\n')
 
     def infer(self, samples: list, sampling_params: SamplingParams, batch_size: int= 16):
 
@@ -174,18 +153,6 @@ class InferenceActor:
                 screen_width= resize_image.width,
                 screen_height= resize_image.height,
             )
-            # messages = build_qwen_focus_cot_with_example(
-            #     image_example= RESIZE_IMAGE_EXAMPLE,
-            #     instruction_example= INSTRUCTION_EXAMPLE,
-            #     screen_width_example= RESIZE_IMAGE_EXAMPLE.width,
-            #     screen_height_example= RESIZE_IMAGE_EXAMPLE.height,
-            #     cot_example= COT_EXAMPLE,
-            #     focus_box_example= FOCUS_BOX_EXAMPLE,
-            #     instruction= instruction,
-            #     image= resized_image,
-            #     screen_width= resized_width,
-            #     screen_height= resized_height,
-            # )
             prompt = self.processor.apply_chat_template(
                 messages, tokenize=False, add_generation_prompt=True
             )
@@ -266,19 +233,13 @@ class InferenceActor:
                     else:
                         cot_correct.append(False)
 
-
                 ###应该把模型生成的框也放进去，方便处理
-
                 item['running']['model_boxes'] = model_box_list
                 item['running']['cots'] =  cot_list
                 item['running']['boxes'] = box_list
                 item['running']['cot_correct'] = cot_correct
 
-
-
-
                 log_response_answers.append(item)
-                # self.write_one_by_one(item)
             # write to file
             print(f"Actor@{self.actor_id} is writting into file ...")
             self.write_file(log_response_answers)
@@ -346,9 +307,6 @@ def batch_inf():
         futures = []
 
         for chunk, infer_actor in zip(train_chunks, infer_actors):
-            ####
-            # chunk = random.sample(list(chunk), 20)  # debug
-
 
             print(f"[DEBUG] chunk size: {len(chunk)}")
             future = infer_actor.infer.remote(

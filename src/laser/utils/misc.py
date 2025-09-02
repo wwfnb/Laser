@@ -2,7 +2,25 @@ from PIL import Image
 from io import BytesIO
 from transformers.models.qwen2_vl.image_processing_qwen2_vl_fast import smart_resize
 import os
+import ray
+import atexit
+
 DEBUG_FLAG = (True if os.environ.get('DEBUG_FLAG', 'false').lower() == 'true' else False)
+
+
+def setup_ray(WORKER_NODE):
+    if not ray.is_initialized():
+        print(f"ray is not initialized, initializing...")
+        ray.init(
+        num_cpus=16,
+        num_gpus=WORKER_NODE,
+        address="local"      # 禁止自动连接外部
+        )
+    def cleanup_ray():
+        if ray.is_initialized():
+            ray.shutdown()
+            print("closing ray...")
+    atexit.register(cleanup_ray)
 def get_tensor_parallel_size():
     """
     """

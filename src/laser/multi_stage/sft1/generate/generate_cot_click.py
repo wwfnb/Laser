@@ -14,6 +14,7 @@ import copy
 from io import BytesIO
 import base64
 import random
+import argparse
 
 from pixel_grounding.misc import generate_id, get_date, load_and_resize_image
 import re
@@ -83,7 +84,6 @@ def setup_ray():
 
 # setting for vlm
 from pixel_grounding.misc import TENSOR_PARALLEL_SIZE
-from pixel_grounding.models.qwen2_5vl import CustomQwen2_5VL_VLLM_Model
 LIMIT_MM_PER_PROMPT={
     "image": 1
 }
@@ -169,18 +169,6 @@ class InferenceActor:
                 screen_width= resize_image.width,
                 screen_height= resize_image.height,
             )
-            # messages = build_qwen_focus_cot_with_example(
-            #     image_example= RESIZE_IMAGE_EXAMPLE,
-            #     instruction_example= INSTRUCTION_EXAMPLE,
-            #     screen_width_example= RESIZE_IMAGE_EXAMPLE.width,
-            #     screen_height_example= RESIZE_IMAGE_EXAMPLE.height,
-            #     cot_example= COT_EXAMPLE,
-            #     focus_box_example= FOCUS_BOX_EXAMPLE,
-            #     instruction= instruction,
-            #     image= resized_image,
-            #     screen_width= resized_width,
-            #     screen_height= resized_height,
-            # )
             prompt = self.processor.apply_chat_template(
                 messages, tokenize=False, add_generation_prompt=True
             )
