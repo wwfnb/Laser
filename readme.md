@@ -23,7 +23,7 @@
 - **[May 1, 2025]**: 🤗 **[WebThinker Model Collection](https://huggingface.co/collections/lixiaoxi45/webthinker-6812d5fd1287ee53d68f0557)** is now available on Hugging Face. You can deploy our optimized models for your deep research tasks.
 - **[May 1, 2025]**: 📄 Our paper is now available on **[arXiv](https://arxiv.org/abs/2504.21776)** and **[Hugging Face](https://huggingface.co/papers/2504.21776)**.
 - **[March 31, 2025]**: 🎉 **[Laser HomePage](https://wwfnb.github.io/Laser/)** launched with comprehensive project details. -->
-- **[September 3, 2025]**: 🚀 Full codebase released. Laser now supports self-envloving pipeline with any models like Qwen2.5-VL-7B or GTA1-7B.
+- **[September 3, 2025]**: 🚀 Full codebase released. Laser now supports self-envloving pipeline with any models like [Qwen2.5-VL-7B](https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct) or [GTA1-7B](https://huggingface.co/HelloKKMe/GTA1-7B).
 
 
 # Release Plans
@@ -32,9 +32,9 @@
   - [x] Training
   - [x] Evaluation
 - [x] Model
-  - [x][Laser(qwen2.5_vl-7b)]
-  - [x][Laser(GTA1-7b)]
-- [ ] Training Dataset(coming soon)
+  - [x] Laser(qwen2.5_vl-7b)
+  - [x] Laser(GTA1-7b)
+- [ ] Training Dataset(coming soon !)
 
 
 ## 💡 Overview
@@ -59,7 +59,7 @@ of both overall grounding accuracy and generalization abil-
 ity across different domains, demonstrating the effectiveness
 and robustness of our self-evolving training strategy.
 
-### ✨ The Laser Framework
+### ✨ The WebThinker Framework
 
 <p align="center">
   <img src="./figures/overview.png" width="70%" />
@@ -113,7 +113,7 @@ pip install -e ".[torch,metrics]" --no-build-isolation
 git clone https://github.com/wwfnb/Laser.git
 conda create --name Laser python==3.11
 conda activate Laser
-cd laser
+cd Laser
 pip install qwen-vl-utils
 pip install 'vllm>0.7.2'
 pip install -e .
@@ -128,12 +128,16 @@ Make sure you are in the Laser environment.
 ## 1️⃣ Step 1: Preprocessing
 
 ### 📂 Download Dataset
-The data used for generation comes from [GRPO for GUI Grounding Done Right](https://huggingface.co/blog/HelloKKMe/grounding-r1), available on Hugging Face: [grounding_dataset](https://huggingface.co/datasets/HelloKKMe/grounding_dataset/tree/main).Please download the dataset and place it under:
-
+The data used for generation comes from [GTA1: GUI Test-time Scaling Agent](https://arxiv.org/pdf/2507.05791), available on Hugging Face: [grounding_dataset](https://huggingface.co/datasets/HelloKKMe/grounding_dataset/tree/main).Please download the dataset and place it under `data/opensource_data`:
 ```bash
-data/opensource_data
+mkdir data/opensource_data
+# download the grounding_dataset
+huggingface-cli download --repo-type dataset --resume-download "HelloKKMe/grounding_dataset" --local-dir "data/opensource_data"
+# unzip the images
+cd data/opensource_data
+cat image.part.a* > image.tar
+tar -xvf image.tar
 ```
-
 ### ⚙️ Preprocess Dataset
 We preprocess the dataset using the following script:
 
@@ -213,7 +217,7 @@ bash scripts/train/train_multi_dpo.sh
 
 
 # 📊 Evaluation
-We evaluate **Laser** on two widely-used GUI grounding benchmarks:**[ScreenSpot-Pro](https://huggingface.co/datasets/likaixin/ScreenSpot-Pro)** and **[ScreenSpot-V2](https://huggingface.co/datasets/OS-Copilot/ScreenSpot-v2)**. 
+We evaluate **Laser** on two widely-used GUI grounding benchmarks:**[ScreenSpot-Pro](https://huggingface.co/datasets/likaixin/ScreenSpot-Pro)** and **[ScreenSpot-V2](https://huggingface.co/datasets/OS-Copilot/ScreenSpot-v2)**. Put the ScreenSpot-Pro and ScreenSpot-V2 under `data/benchmark`.
 Make sure you are in the **Laser** environment and have **downloaded the datasets**.  We provide scripts for easy evaluation:
 
 ### Evaluate on **ScreenSpot-Pro**
@@ -222,8 +226,8 @@ bash scripts/eval/eval_sceenspot_pro.sh
 ```
 ### Evaluate on **ScreenSpot-V2**
 ```bash
-## process the data
-python data/benchmark/ScreenSpot-v2/transfer.py
+## process the data, just once.
+python scripts/transfer.py
 ## evaluate
 bash scripts/eval/eval_screenspot_v2.sh
 ```
@@ -232,27 +236,7 @@ bash scripts/eval/eval_screenspot_v2.sh
 
 If you find this work helpful, please cite our paper:
 ```bibtex
-@article{Li2025WebThinker,
-  author       = {Xiaoxi Li and
-                  Jiajie Jin and
-                  Guanting Dong and
-                  Hongjin Qian and
-                  Yutao Zhu and
-                  Yongkang Wu and
-                  Ji{-}Rong Wen and
-                  Zhicheng Dou},
-  title        = {WebThinker: Empowering Large Reasoning Models with Deep Research Capability},
-  journal      = {CoRR},
-  volume       = {abs/2504.21776},
-  year         = {2025},
-  url          = {https://doi.org/10.48550/arXiv.2504.21776},
-  doi          = {10.48550/ARXIV.2504.21776},
-  eprinttype    = {arXiv},
-  eprint       = {2504.21776},
-  timestamp    = {Sun, 25 May 2025 20:50:43 +0200},
-  biburl       = {https://dblp.org/rec/journals/corr/abs-2504-21776.bib},
-  bibsource    = {dblp computer science bibliography, https://dblp.org}
-}
+
 ``` -->
 
 ## 📄 License
