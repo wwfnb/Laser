@@ -1,0 +1,36 @@
+input:
+  model_name_or_path: "models/qwen2.5_vl_7b"
+  source_dataset_path: "data/opensource_data/grounding_r1_aria.jsonl"
+
+output_data_dir:
+  synthetic_data_dir: "data/synthetic_data"
+  train_data_dir: "data/llamafactory_training_data"
+
+
+generation:
+  batch_size: 16
+  max_samples: 10000   ### The maximum amount of data read in at one time
+  max_pixels: 2408448
+  temperature: 0.7
+  top_p: 0.8
+  max_tokens: 3072
+  crop: 
+    voting_times: 5
+  click: 
+    voting_times: 3
+
+  max_reject_sampling_crop_num: 10000   ###Maximum generation size
+  max_reject_sampling_click_num: 10000
+
+
+process:
+  tmp_output_image: "cache/single_step_sft_crop_image"
+  reject_sampling_crop:
+    I_RATIO: 0.75
+    EXPANED_RATIO: 0.2
+    MAX_SIZE: 0.5
+
+  reject_sampling_click:
+    max_pixels: 2408448
+    max_workers: 40
+    

@@ -1,0 +1,44 @@
+### model
+model_name_or_path: models/qwen2.5_vl_7b
+image_max_pixels: 999999999 # 2048*28*28
+video_max_pixels: 16384
+trust_remote_code: true
+
+### method
+stage: sft
+do_train: true
+finetuning_type: full
+freeze_vision_tower: true
+freeze_multi_modal_projector: true
+freeze_language_model: false
+deepspeed: config/deepspeed/ds_z3_config.json
+
+### dataset
+dataset_dir: data/llamafactory_training_data
+dataset: single_step_sft_dataset
+template: qwen2_vl
+cutoff_len: 8192
+max_samples: 300000
+overwrite_cache: true
+preprocessing_num_workers: 32
+dataloader_num_workers: 0
+
+### output
+output_dir: saves/qwen2_5vl-7b/single_step_sft_model
+logging_steps: 10
+save_steps: 300
+plot_loss: true
+overwrite_output_dir: true
+save_only_model: false
+report_to: none  # choices: [none, wandb, tensorboard, swanlab, mlflow]
+
+### train
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 16
+learning_rate: 1.0e-5
+num_train_epochs: 1.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+ddp_timeout: 180000000
+resume_from_checkpoint: null

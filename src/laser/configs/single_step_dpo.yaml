@@ -1,0 +1,25 @@
+input:
+  model_name_or_path: "saves/qwen2_5vl-7b/single_step_sft_model"
+  source_dataset_path: "data/opensource_data/grounding_r1_aria.jsonl"
+
+output_data_dir:
+  synthetic_data_dir: "data/synthetic_data"
+  train_data_dir: "data/llamafactory_training_data"
+
+generation:
+  batch_size: 8
+  max_samples: 1000
+  max_pixels: 2408448
+  max_tokens: 4096
+  temperature: 0.7
+  top_p: 0.8
+  smart_image_dir: "cache/single_step_dpo_crop_resize_image"
+  passN: 5
+  max_roll: 3
+
+  max_num: 2000
+
+process:
+  max_pixels: 802816
+  max_workers: 40 
+    

@@ -3,6 +3,7 @@ cache/
 data/
 LLaMA-Factory/
 models/
+result/
 
 node_modules/
 .env

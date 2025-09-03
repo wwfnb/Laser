@@ -6,23 +6,27 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 
 requirements = [
-    "qwen-vl-utils"
+    "qwen_vl_utils"
 ]
 
 setup(
     name="laser",
-    author_email="wanfuwang513@gmail.com" 
     version="0.1.0",
+    author="",
+    author_email="",
     description="",
     long_description=long_description,
     long_description_content_type="text/markdown",
+    url="",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     classifiers=[
-        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.11",
     install_requires=requirements,
+    entry_points={
+    },
 )

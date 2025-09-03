@@ -4,6 +4,7 @@ from transformers.models.qwen2_vl.image_processing_qwen2_vl_fast import smart_re
 import os
 import ray
 import atexit
+import torch
 
 DEBUG_FLAG = (True if os.environ.get('DEBUG_FLAG', 'false').lower() == 'true' else False)
 
@@ -21,6 +22,15 @@ def setup_ray(WORKER_NODE):
             ray.shutdown()
             print("closing ray...")
     atexit.register(cleanup_ray)
+
+
+
+def get_visible_gpus():
+    visible_devices = os.environ.get("CUDA_VISIBLE_DEVICES", "")
+    if visible_devices:
+        return visible_devices.split(",")
+    else:
+        return [str(i) for i in range(torch.cuda.device_count())]
 def get_tensor_parallel_size():
     """
     """
@@ -134,6 +144,26 @@ def insertion_area(box1: list, box2: list) -> float:
 
     return (x_right - x_left) * (y_bottom - y_top)
 
+def adjust_box(box: list, width, height) -> list:
+    x1, y1, x2, y2 = box
+    x1 = max(0, x1)
+    y1 = max(0, y1)
+    x2 = min(width, x2)
+    y2 = min(height, y2)
+    return [x1, y1, x2, y2]
+
+def box_area(box: list) -> float:
+    x1, y1, x2, y2 = box
+    return (x2 - x1) * (y2 - y1)
+
+def transfer_box(box: list, now_width, now_height, dest_width, dest_height) -> list:
+    return [box[0] * dest_width / now_width, box[1] * dest_height / now_height, box[2] * dest_width / now_width, box[3] * dest_height / now_height]
+
+def box_contains(box1: list, box2: list) -> bool:
+    return (box1[0] <= box2[0] and box1[1] <= box2[1] and box1[2] >= box2[2] and box1[3] >= box2[3])
+
+def box_valid(box: list) -> bool:
+    return len(box) == 4 and (box[0] < box[2] and box[1] < box[3])
 def extend_box(box: list)-> list:
     x1, y1, x2, y2 = box
     min_size = 50
@@ -274,8 +304,7 @@ def crop_centered_on_box(image_path, box, save_path, ratio = 2):
 
     return cropped, [left, top, right, bottom]
 
-def box_contains(box1: list, box2: list) -> bool:
-    return (box1[0] <= box2[0] and box1[1] <= box2[1] and box1[2] >= box2[2] and box1[3] >= box2[3])
+
 
 K1_TOKEN_pixels = 1024*28*28
 K2_TOKEN_pixels = 2*1024*28*28
