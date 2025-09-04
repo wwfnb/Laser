@@ -54,14 +54,14 @@
   <span style="display:inline-block; width:5%;"></span>
   <img src="./figures/performance2.png" height="250px" />
 </p>
-As shown above, s. The evaluation covers six GUI domains
+As shown above, the evaluation covers six GUI domains
 and two task types (Text and Icon grounding). Our method,
 LASER, consistently outperforms previous models in terms
 of both overall grounding accuracy and generalization abil-
 ity across different domains, demonstrating the effectiveness
 and robustness of our self-evolving training strategy.
 
-### ✨ The WebThinker Framework
+### ✨ The Laser Framework
 
 <p align="center">
   <img src="./figures/overview.png" width="70%" />
@@ -95,7 +95,7 @@ generate multi-step reasoning trajectories, enabling the
 construction of a diverse and difficulty-aware training
 data. The final model is then trained on this multi-step
 dataset D<sub>⟳</sub>, making it with the ability to dynamically ad-
-just reasoning depth based on the difficulty of the query
+just reasoning depth based on the difficulty of the query.
 
 
 
