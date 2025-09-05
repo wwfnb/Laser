@@ -6,7 +6,7 @@
 
 [![Paper](https://img.shields.io/badge/Paper-arXiv-b5212f.svg?logo=arxiv)](https://arxiv.org/abs/2509.04243v1)
 [![Blog](https://img.shields.io/badge/📒-Blog%20Post-blue)](https://wwfnb.github.io/Laser)
-[![Dataset](https://img.shields.io/badge/Dataset-Hugging%20Face-yellow?logo=huggingface)]()
+[![Dataset](https://img.shields.io/badge/Dataset-Hugging%20Face-yellow?logo=huggingface)](https://huggingface.co/datasets/qqer/laser_gui_grounding_training_data/tree/main)
 [![License](https://img.shields.io/badge/LICENSE-MIT-green.svg)](https://opensource.org/licenses/MIT) 
 [![Organization](https://img.shields.io/badge/Organization-OpenNLG%20Group-blueviolet)](https://opennlg.cn/)
 </div>
@@ -37,7 +37,7 @@
 - [x] Model
   - [x] Laser(qwen2.5_vl-7b)
   - [x] Laser(GTA1-7b)
-- [ ] Training Dataset(coming soon !)
+- [x] [Training Dataset](https://huggingface.co/datasets/qqer/laser_gui_grounding_training_data/tree/main)
 
 
 ## 💡 Overview
@@ -193,8 +193,30 @@ data/llamafactory_training_data
 ```
 They will follow the LLaMA-Factory training format, making them ready for immediate use in training.
 # 🏋️‍♂️ Training
-We train our models in **four stages**, using the datasets generated in the corresponding stages of the data generation process.  
+
+## 📂 Dataset Preparation
+You can either construct the datasets using the data generation process described above, or directly download our training data to start model training.
+You can download our training data from [Hugging Face](https://huggingface.co/datasets/qqer/laser_gui_grounding_training_data/tree/main).
+The dataset is split into multiple parts, e.g.:
+```bash
+llamafactory_training_data.tar.gz.part_aa
+llamafactory_training_data.tar.gz.part_ab
+...
+```
+Use `cat` to merge them into a single archive:
+```bash
+cat llamafactory_training_data.tar.gz.part_* > llamafactory_training_data.tar.gz
+```
+Then extract it under the data/ directory:
+```bash
+mkdir -p data
+tar -xzvf llamafactory_training_data.tar.gz -C data
+```
+
+## 🚀 Start Training
+We train our models in four stages, using the datasets prepared above.
 Each stage focuses on a specific training purpose.
+Make sure you are in the LLaMA-Factory training environment.
 
 Make sure you are in the LLaMA-Factory training environment.
 ### 🔍 **Eliciting Active Perception through Visual Cropping**
