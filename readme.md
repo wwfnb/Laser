@@ -4,10 +4,11 @@
 
 <div align="center"> 
 
-<!-- [![Notion](https://img.shields.io/badge/Notion-WebThinker-red?style=flat&logo=notion&logoColor=white)]() s -->
-[![Paper](https://img.shields.io/badge/Paper-arXiv-b5212f.svg?logo=arxiv)]()
-[![Paper](https://img.shields.io/badge/Paper-Hugging%20Face-yellow?logo=huggingface)]()
+[![Paper](https://img.shields.io/badge/Paper-arXiv-b5212f.svg?logo=arxiv)](https://arxiv.org/abs/2509.04243v1)
+[![Blog](https://img.shields.io/badge/📒-Blog%20Post-blue)](https://wwfnb.github.io/Laser)
+[![Dataset](https://img.shields.io/badge/Dataset-Hugging%20Face-yellow?logo=huggingface)]()
 [![License](https://img.shields.io/badge/LICENSE-MIT-green.svg)](https://opensource.org/licenses/MIT) 
+[![Organization](https://img.shields.io/badge/Organization-OpenNLG%20Group-blueviolet)](https://opennlg.cn/)
 </div>
 
 <p align="center">
@@ -137,8 +138,7 @@ mkdir data/opensource_data
 huggingface-cli download --repo-type dataset --resume-download "HelloKKMe/grounding_dataset" --local-dir "data/opensource_data"
 # unzip the images
 cd data/opensource_data
-cat image.part.a* > image.tar
-tar -xvf image.tar
+unzip image.part.aa
 ```
 ### ⚙️ Preprocess Dataset
 We preprocess the dataset using the following script:
@@ -234,12 +234,20 @@ python scripts/transfer.py
 bash scripts/eval/eval_screenspot_v2.sh
 ```
 
-<!-- ## 📄 Citation
+## 📄 Citation
 
 If you find this work helpful, please cite our paper:
 ```bibtex
-
-``` -->
+@misc{wang2025learningactiveperceptionselfevolving,
+      title={Learning Active Perception via Self-Evolving Preference Optimization for GUI Grounding}, 
+      author={Wanfu Wang and Qipeng Huang and Guangquan Xue and Xiaobo Liang and Juntao Li},
+      year={2025},
+      eprint={2509.04243},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2509.04243}, 
+}
+```
 
 ## 📄 License
 
