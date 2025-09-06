@@ -217,8 +217,6 @@ tar -xzvf llamafactory_training_data.tar.gz -C data
 We train our models in four stages, using the datasets prepared above.
 Each stage focuses on a specific training purpose.
 Make sure you are in the LLaMA-Factory training environment.
-
-Make sure you are in the LLaMA-Factory training environment.
 ### 🔍 **Eliciting Active Perception through Visual Cropping**
   - *Stage 1: Single-step SFT Training* 
 ```bash
