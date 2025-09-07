@@ -714,12 +714,30 @@
               <img src="static\images\overview.png">
             </div>
             <div class="desc">
-              <b>Overview</b>: Given a user instruction and the original image, the trained MLASER
-              model progressively focuses on key regions through a multi-step reasoning process. At each step, the
-              Visual CoT captures
-              critical cues (highlighted in red within the <think> tag) based on the current focus region. Below, we
-                also illustrate the multi-
-                stage self-evolving optimization process that elicits LASER’s multi-step active perception capabilities
+              <b>Overview</b>: 
+              Given a user instruction and the original image, the trained M<sub>LASER</sub> model progressively focuses on key regions through a multi-step reasoning process. 
+              At each step, the Visual CoT captures critical cues (highlighted in red within the &lt;think&gt; tag) based on the current focus region. 
+              Below, we also illustrate the multi-stage self-evolving optimization process that elicits LASER’s multi-step active perception capabilities.
+              <ol>
+                <li>
+                  <b>Eliciting Active Perception through Visual Cropping.</b>
+                  Given the paired training data, we prompt the VLM back-bone M<sub>raw</sub> to predict a focused region. 
+                  The correspond-ing region is then cropped from the original image and integrated into the CoT as visual context, guiding the model toward accurate click-coordinate prediction. 
+                  To improve the quality of reasoning trajectories, we adopt a STaR-style rejection sampling strategy to construct the dataset D<sub>sft</sub>, which is used to finetune M<sub>sft</sub>.
+                </li>
+                <li>
+                  <b>Learning Focused Region Preferences.</b>
+                  We sample mul-tiple reasoning trajectories from M<sub>sft</sub> and estimate region-wise preferences using Monte Carlo Estimation.
+                  An IoU-based filter is applied to remove low-quality candidates. 
+                  The resulting preference pairs dataset D<sub>dpo</sub> are used to train a stronger model M<sub>dpo</sub> via DPO.
+                </li>
+                <li>
+                  <b>Difficulty-Aware Multi-step Perception.</b>
+                  While M<sub>dpo</sub> supports single-step perception, it is prone to failure in complex scenarios that demand deeper reasoning. 
+                  To overcome this limitation, we allow M<sub>dpo</sub> to iteratively generate multi-step reasoning trajectories, enabling the construction of a diverse and difficulty-aware training data. 
+                  The final model is then trained on this multi-step dataset D<sub>⟳</sub>, making it with the ability to dynamically adjust reasoning depth based on the difficulty of the query.
+                </li>
+              </ol>
             </div>
             <!-- <div style="margin-top:20px;"></div>
           <div class="method-image">
@@ -780,14 +798,10 @@
         </div>
         <div class="column is-full-width">
           <div class="desc">
-            As shown in Table 2 and Table 1, we conduct comprehen-
-            sive comparisons on both ScreenSpot-v2 and ScreenSpot-
-            Pro benchmarks. The evaluation covers six GUI domains
-            and two task types (Text and Icon grounding). Our method,
-            LASER, consistently outperforms previous models in terms
-            of both overall grounding accuracy and generalization ability
-            across different domains, demonstrating the effectiveness
-            and robustness of our self-evolving training strategy.
+            As shown in Table 2 and Table 1, we conduct comprehensive comparisons on both ScreenSpot-v2 and ScreenSpot-Pro benchmarks. 
+            The evaluation covers six GUI domains and two task types (Text and Icon grounding). 
+            Our method, LASER, consistently outperforms previous models in terms of both overall grounding accuracy and generalization ability across different domains, 
+            demonstrating the effectiveness and robustness of our self-evolving training strategy.
           </div>
           <div style="margin-top:20px;"></div>
           <div class="results1-image">
@@ -895,14 +909,14 @@
     <div class="container is-max-desktop content">
       <h2 class="title">BibTeX</h2>
       <pre><code>
-        @misc{wang2025learningactiveperceptionselfevolving,
-          title={Learning Active Perception via Self-Evolving Preference Optimization for GUI Grounding}, 
-          author={Wanfu Wang and Qipeng Huang and Guangquan Xue and Xiaobo Liang and Juntao Li},
-          year={2025},
-          eprint={2509.04243},
-          archivePrefix={arXiv},
-          primaryClass={cs.CV},
-          url={https://arxiv.org/abs/2509.04243}, 
+    @misc{wang2025learningactiveperceptionselfevolving,
+      title={Learning Active Perception via Self-Evolving Preference Optimization for GUI Grounding}, 
+      author={Wanfu Wang and Qipeng Huang and Guangquan Xue and Xiaobo Liang and Juntao Li},
+      year={2025},
+      eprint={2509.04243},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2509.04243}, 
     }
       </code></pre>
     </div>

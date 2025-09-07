@@ -1,5 +1,7 @@
-
-<h1 align="center"> Learning Active Perception via Self-Evolving Preference Optimization for GUI Grounding</a></h1>
+<h1 align="center">
+  <img src="./figures/logo.png" alt="logo" height="40" style="vertical-align:middle;margin-left:10px;">
+  Learning Active Perception via Self-Evolving Preference Optimization for GUI Grounding
+</h1>
 
 
 <div align="center"> 
