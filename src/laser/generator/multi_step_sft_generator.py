@@ -223,9 +223,12 @@ class MultiStepSftGenerator:
             print(f"[INFO] load from [{input_data_path}]")
             with open(input_data_path, 'r') as f:     
                 for line in f:
+                    print("has")
                     item = json.loads(line)
-                    if item['id'] in existed_ids: continue
-                    if not os.path.exists(item["img_path"]): continue 
+                    if item['id'] in existed_ids: 
+                        continue
+                    if not os.path.exists(item["img_path"]): 
+                        continue 
                     ###crop 后的图像小于28 * 28， 跳过
                     item["raw_image_url"] = item["img_path"]
                     old_traj = item["old_traj"]
@@ -364,7 +367,7 @@ class MultiStepSftGenerator:
         ###filter，生成单步crop 和多步crop的数据
         one_step_sft_train_data_path = os.path.join(single_step_dpo_train_data_dir, "one_step_sft.jsonl")
         two_step_sft_train_data_path = os.path.join(single_step_dpo_train_data_dir, "two_step_sft.jsonl")
-        self.multiStepSftProcessor.filter_multi_step_sft_train_data(second_crop_output_path, one_step_sft_train_data_path, two_step_sft_train_data_path)
+        self.multiStepSftProcessor.filter_multi_step_sft_train_data(first_crop_output_path, second_crop_output_path, one_step_sft_train_data_path, two_step_sft_train_data_path)
 
 if __name__ == "__main__":
     multi_step_sft_generator = MultiStepSftGenerator()

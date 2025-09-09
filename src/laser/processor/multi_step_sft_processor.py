@@ -68,7 +68,7 @@ class MultiStepSftProcessor:
                 t["n_focus_correctness"] = n_focus_correctness[0][0]
             t["correctness"] = correctness
 
-    def keep_one_traj(self, center: list, trajs: list[dict]):
+    def keep_one_traj_crop_right_click_right(self, center: list, trajs: list[dict]):
         # click right
         correct_trajs = list(filter(lambda t: t['correctness'] == 'correct', trajs))
         # crop right
@@ -81,6 +81,17 @@ class MultiStepSftProcessor:
             return (click_point[0] - center[0]) ** 2 + (click_point[1] - center[1]) ** 2
         correct_trajs.sort(key=dis2center)
         return correct_trajs[0]
+
+    def keep_one_traj_crop_right_click_wrong(self, center: list, trajs: list[dict]):
+        # click right
+        correct_trajs = list(filter(lambda t: t['correctness'] == 'wrong', trajs))
+        # crop right
+        correct_trajs = list(filter(lambda t: t['n_focus_correctness'] == 'correct', correct_trajs))
+
+        if len(correct_trajs) < 1:
+            return None
+        return correct_trajs[0]
+        
     def process_first_crop(self, input_data_path: str, output_data_path: str):
 
         with open(input_data_path, "r") as fin, open(output_data_path, "w") as fout:
@@ -90,7 +101,7 @@ class MultiStepSftProcessor:
                 
                 golden_box = item['bbox']
                 golden_center = [(golden_box[0] + golden_box[2]) / 2, (golden_box[1] + golden_box[3]) / 2]
-                keep_traj = self.keep_one_traj(center= golden_center, trajs= item['trajs'])
+                keep_traj = self.keep_one_traj_crop_right_click_wrong(center= golden_center, trajs= item['trajs'])
                 if keep_traj is None:
                     continue
                 transfer_item = copy.deepcopy(item)
@@ -197,9 +208,9 @@ class MultiStepSftProcessor:
 
         first_crop_user_msg_2  = self.prompt_builder.bulid_user_msg_2(first_resize_crop_image)
 
+        ###combine 中trajs为None 的是没有生成second_traj 的crop_right, click_right 数据，或者是生成second_traj时，第二条没有正确的
         ### 挑一条的raw_box
-        second_traj = self.select_second_traj(data, raw_image_url)     
-        if second_traj == None:
+        if data["trajs"] == None or self.select_second_traj(data, raw_image_url) == None:
             
             ###统计第一个
             area_rate = (box_area(first_crop_box_base_raw) / (raw_image.size[0] * raw_image.size[1]))
@@ -222,7 +233,7 @@ class MultiStepSftProcessor:
             "message": [SYS_MSG, user_msg_1, first_crop_assistant_msg_1, first_crop_user_msg_2, assistant_msg_2],
             "images": [resize_raw_image_url, first_resize_crop_image_url],
         }
-
+        second_traj = self.select_second_traj(data, raw_image_url)  
         second_resize_crop_image_url = os.path.join(out_put_image, data["id"] + f"resize_second_crop{self.DOUBLE_CROP_RATE}.png")
         ###处理第二步图像
         second_crop_image, second_resize_crop_image = self.resize_crop_and_save_image(raw_image= first_crop_image, box= second_traj["raw_box"][0], save_image_url= second_resize_crop_image_url)
@@ -279,12 +290,54 @@ class MultiStepSftProcessor:
                     else:
                         print("error!!")
 
+    def combine_two_data(self, first_input_data_path: str, second_input_data_path: str, output_data_path: str):
+
+        set_id_second = set()
+
+        with open(output_data_path, "w") as fout:
+        
+            with open(second_input_data_path, "r") as fin:
+                for line in fin:
+                    data = json.loads(line)
+                    raw_image_url = data["raw_image_url"]
+                    second_traj = self.select_second_traj(data, raw_image_url)   
+
+                    if second_traj != None:
+                        set_id_second.add(data["id"])
+                        fout.write(json.dumps(data) + '\n')
+
+            with open(first_input_data_path, "r") as fin:
+                for line in fin:
+                    data = json.loads(line)
+                    if data["id"] not in set_id_second:
+                        self.eval_trajs(data)
+
+                        golden_box = data['bbox']
+                        golden_center = [(golden_box[0] + golden_box[2]) / 2, (golden_box[1] + golden_box[3]) / 2]
+                        keep_traj = self.keep_one_traj_crop_right_click_right(center= golden_center, trajs= data['trajs'])
+                        if keep_traj is None:
+                            continue
+                        transfer_item = copy.deepcopy(data)
+                        transfer_item.pop('trajs')
+
+                        transfer_item['old_traj'] = keep_traj
+                        transfer_item['trajs'] = None
+                        transfer_item["raw_image_url"] = transfer_item["img_path"]
+
+                        fout.write(json.dumps(transfer_item) + '\n')
+
     
-    def filter_multi_step_sft_train_data(self, input_data_path: str, output_one_step_path: str, output_two_step_path: str):
+    def filter_multi_step_sft_train_data(self, first_input_data_path:str, second_input_data_path: str, output_one_step_path: str, output_two_step_path: str):
+
+
 
         pre_dir  = os.path.dirname(output_one_step_path)
         output_image = os.path.join(pre_dir, "multi_step_sft_image")
         os.makedirs(output_image, exist_ok=True)
+
+        input_data_path = os.path.join(os.path.dirname(first_input_data_path), "combine_two_data.jsonl")
+
+        self.combine_two_data(first_input_data_path=first_input_data_path, second_input_data_path=second_input_data_path, output_data_path=input_data_path)
 
         self.process_all_jsons(
             input_json_list=[input_data_path],
