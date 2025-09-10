@@ -1,8 +1,35 @@
-<h1 align="center">
-  <img src="./figures/logo.png" alt="logo" height="40" style="vertical-align:middle;margin-left:10px;">
+<!-- <h1 align="center">
+  <img src="./figures/logo.jpg" alt="logo" height="40" style="vertical-align:middle;margin-left:10px;">
   Learning Active Perception via Self-Evolving Preference Optimization for GUI Grounding
-</h1>
+</h1> -->
+<!-- <table>
+  <tr>
+    <td><img src="./figures/logo.jpg" alt="logo" height="80"></td>
+    <td><h1>Learning Active Perception via Self-Evolving Preference Optimization for GUI Grounding</h1></td>
+  </tr>
+</table> -->
+<!-- <table>
+  <tr>
+    <td><img src="./figures/logo.jpg" alt="logo" height="80"></td>
+    <td><h1>Learning Active Perception via Self-Evolving Preference Optimization for GUI Grounding</h1></td>
+  </tr>
+</table> -->
 
+<!-- <h1>
+  <img src="./figures/logo.jpg" alt="logo" height="80" style="vertical-align: middle; margin-right: 15px;">
+  Learning Active Perception via Self-Evolving Preference Optimization for GUI Grounding
+</h1> -->
+
+<table style="border: none;">
+  <tr style="border: none;">
+    <td style="border: none; vertical-align: middle;">
+      <img src="./figures/logo.jpg" alt="logo" height="100">
+    </td>
+    <td style="border: none; vertical-align: middle; padding-left: 15px;">
+      <h1>Learning Active Perception via Self-Evolving Preference Optimization for GUI Grounding</h1>
+    </td>
+  </tr>
+</table>
 
 <div align="center"> 
 
