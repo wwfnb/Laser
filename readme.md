@@ -31,12 +31,24 @@
   </tr>
 </table> -->
 <p align="center">
-  <img src="./figures/logo.jpg" alt="Laser.logo" height="120">
+  <!-- <img src="./figures/logo.jpg" alt="Laser.logo" height="120"> -->
+  
 </p>
 
+<!-- <div>
+<img src="./figures/logo.jpg" alt="logo" style="max-width:140px; height:auto; border-radius:50px;">
 <h1 align="center">
   Learning Active Perception via Self-Evolving Preference Optimization for GUI Grounding
 </h1>
+</div> -->
+<div style="display: flex; align-items: center; justify-content: center; gap: 20px;">
+  <img src="./figures/logo.jpg" alt="logo" style="max-width:120px; height:auto; border-radius:20px;">
+  <h1 style="margin: 0;">
+    Learning Active Perception via Self-Evolving Preference Optimization for GUI Grounding
+  </h1>
+</div>
+
+
 
 
 <div align="center"> 
