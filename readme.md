@@ -48,7 +48,7 @@
   </h1>
 </div> -->
 <p align="center">
-  <img src="./figures/logo.jpg" alt="logo" width="140" style="border-radius:20px;">
+  <img src="./figures/logo_radius.jpg" alt="logo" width="240" style="border-radius:20px;">
 </p>
 
 <h1 align="center">
