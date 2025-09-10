@@ -20,7 +20,7 @@
   Learning Active Perception via Self-Evolving Preference Optimization for GUI Grounding
 </h1> -->
 
-<table style="border: none;">
+<!-- <table style="border: none;">
   <tr style="border: none;">
     <td style="border: none; vertical-align: middle;">
       <img src="./figures/logo.jpg" alt="logo" height="100">
@@ -29,7 +29,15 @@
       <h1>Learning Active Perception via Self-Evolving Preference Optimization for GUI Grounding</h1>
     </td>
   </tr>
-</table>
+</table> -->
+<p align="center">
+  <img src="./figures/logo.jpg" alt="Laser.logo" height="120">
+</p>
+
+<h1 align="center">
+  Learning Active Perception via Self-Evolving Preference Optimization for GUI Grounding
+</h1>
+
 
 <div align="center"> 
 
