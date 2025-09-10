@@ -288,7 +288,7 @@ bash scripts/train/train_single_dpo.sh
 ```bash
 bash scripts/train/train_multi_sft.sh
 ```
-  - *Stage 4: Multi-step SFT Training*
+  - *Stage 4: Multi-step DPO Training*
 ```bash
 bash scripts/train/train_multi_dpo.sh
 ```
