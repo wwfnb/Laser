@@ -96,9 +96,16 @@
 - [x] [Training Dataset](https://huggingface.co/datasets/qqer/laser_gui_grounding_training_data/tree/main)
 
 
-## 💡 Overview
+<!-- ## 💡 Overview
 <p align="center">
   <img src="./figures/performance.png" width="70%" />
+</p>
+
+![Demo Animation](./figures/case_bilibili.gif) -->
+## 💡 Overview
+<p align="center">
+  <img src="./figures/case_bilibili.gif" width="45%" />
+  <img src="./figures/performance.png" width="45%" />
 </p>
 
 **Laser** is a self-evolving optimization framework, which nables the model to bootstrap its active perception capabilities through rejection sampling–based SFT and region-wise preference learning, without relying on extensive human supervision.
