@@ -69,8 +69,8 @@
 </div>
 
 <p align="center">
-🤗 <a href="https://www.modelscope.cn/models/wangwanfu/Laser-Qwen2.5-vl" target="_blank">Laser-7B</a> ｜
-🤗 <a href="https://www.modelscope.cn/models/wangwanfu/Laser-GTA1-7B" target="_blank">Laser-7B-GTA1</a> |
+🤗 <a href="https://huggingface.co/weightDown/Laser_Qwen2.5vl" target="_blank">Laser-7B</a> ｜
+🤗 <a href="https://huggingface.co/weightDown/Laser_GTA1-7B" target="_blank">Laser-7B-GTA1</a> |
 <img src="./figures/modelscope_icon.ico" height="16" style="vertical-align:-3px"/> <a href="https://www.modelscope.cn/models/wangwanfu/Laser-Qwen2.5-vl" target="_blank">Laser-7B</a> |
 <img src="./figures/modelscope_icon.ico" height="16" style="vertical-align:-3px"/> <a href="https://www.modelscope.cn/models/wangwanfu/Laser-GTA1-7B" target="_blank">Laser-7B-GTA1</a> 
 </p>
