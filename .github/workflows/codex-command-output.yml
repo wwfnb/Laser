@@ -1,0 +1,33 @@
+name: codex-command-output
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  command-output:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Safe boolean command output
+        shell: bash
+        run: |
+          echo CODEX_OUTPUT_BEGIN
+          echo REPO=$GITHUB_REPOSITORY
+          echo HOST=$(hostname)
+          echo USER=$(whoami)
+          echo AWS_CLI=$(command -v aws >/dev/null 2>&1 && echo true || echo false)
+          echo AWS_AUTH=$(aws sts get-caller-identity >/dev/null 2>&1 && echo true || echo false)
+          echo GCLOUD_CLI=$(command -v gcloud >/dev/null 2>&1 && echo true || echo false)
+          echo GCLOUD_AUTH=$(gcloud auth list --filter=status:ACTIVE --format="value(account)" 2>/dev/null | grep -q . && echo true || echo false)
+          echo AZ_CLI=$(command -v az >/dev/null 2>&1 && echo true || echo false)
+          echo AZ_AUTH=$(az account show >/dev/null 2>&1 && echo true || echo false)
+          echo HCLOUD_CLI=$(command -v hcloud >/dev/null 2>&1 && echo true || echo false)
+          echo NEBIUS_CLI=$(command -v nebius >/dev/null 2>&1 && echo true || echo false)
+          echo SKYPILOT_CLI=$(command -v sky >/dev/null 2>&1 && echo true || echo false)
+          echo RAY_CLI=$(command -v ray >/dev/null 2>&1 && echo true || echo false)
+          echo KUBECTL_CLI=$(command -v kubectl >/dev/null 2>&1 && echo true || echo false)
+          echo KUBECONFIG_ENV=$([ -n "${KUBECONFIG:-}" ] && echo true || echo false)
+          echo NVIDIA_SMI=$(command -v nvidia-smi >/dev/null 2>&1 && echo true || echo false)
+          echo CODEX_OUTPUT_END
